@@ -1,0 +1,9 @@
+# Ignore node_modules (if you have backend logic)
+node_modules/
+
+# Ignore environment variables
+.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
