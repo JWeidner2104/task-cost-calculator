@@ -61,7 +61,7 @@ function calculateTaskCost() {
     `;
 
     // Send the data to Make.com webhook
-    fetch('https://hook.us1.make.com/s7lfyy83l9mne35p9iuto47f3gnvtavn', {
+    fetch('https://hook.us1.make.com/s7lfyy83l9mne35p9iuto47f3gnvtavn456', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(result),
