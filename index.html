@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Cost Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Cost Calculator</h1>
+
+        <label for="task">Task Description</label>
+        <input type="text" id="task" placeholder="Describe the task">
+
+        <label for="salary">Annual Salary ($)</label>
+        <select id="salary" onchange="toggleOtherInput(this, 'salaryOther')">
+            <option value="50000">50,000</option>
+            <option value="60000" selected>60,000</option>
+            <option value="70000">70,000</option>
+            <option value="80000">80,000</option>
+            <option value="100000">100,000</option>
+            <option value="other">Other</option>
+        </select>
+        <input type="number" id="salaryOther" class="hidden" placeholder="Enter custom salary">
+
+        <label for="benefits">Benefits Percentage (%)</label>
+        <select id="benefits" onchange="toggleOtherInput(this, 'benefitsOther')">
+            <option value="10">10%</option>
+            <option value="20">20%</option>
+            <option value="25" selected>25%</option>
+            <option value="30">30%</option>
+            <option value="40">40%</option>
+            <option value="other">Other</option>
+        </select>
+        <input type="number" id="benefitsOther" class="hidden" placeholder="Enter custom benefits %">
+
+        <label for="taskMinutes">Task Duration (Minutes Per Day)</label>
+        <select id="taskMinutes" onchange="toggleOtherInput(this, 'taskMinutesOther')">
+            <option value="15">15 minutes</option>
+            <option value="30" selected>30 minutes</option>
+            <option value="60">1 hour</option>
+            <option value="120">2 hours</option>
+            <option value="other">Other</option>
+        </select>
+        <input type="number" id="taskMinutesOther" class="hidden" placeholder="Enter custom task duration">
+
+        <label for="vacationDays">Vacation Days Per Year</label>
+        <select id="vacationDays" onchange="toggleOtherInput(this, 'vacationDaysOther')">
+            <option value="5">5 days</option>
+            <option value="10" selected>10 days</option>
+            <option value="15">15 days</option>
+            <option value="20">20 days</option>
+            <option value="other">Other</option>
+        </select>
+        <input type="number" id="vacationDaysOther" class="hidden" placeholder="Enter custom vacation days">
+
+        <label for="sickDays">Sick Days Per Year</label>
+        <select id="sickDays" onchange="toggleOtherInput(this, 'sickDaysOther')">
+            <option value="0">0 days</option>
+            <option value="5" selected>5 days</option>
+            <option value="10">10 days</option>
+            <option value="other">Other</option>
+        </select>
+        <input type="number" id="sickDaysOther" class="hidden" placeholder="Enter custom sick days">
+
+        <button onclick="calculateTaskCost()">Calculate Costs</button>
+
+        <div class="result" id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
