@@ -1,45 +1,84 @@
+/* General styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1b1d26;
+    font-family: 'Arial', sans-serif;
+    background-color: #1b1d26; /* Dark theme background */
     color: white;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
+/* Container styles */
 .container {
     background: #252934;
-    padding: 30px;
+    padding: 30px 40px;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
+    text-align: left;
 }
 
+/* Headings */
 h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
     text-align: center;
+}
+
+.description {
+    font-size: 14px;
+    color: #cfd1d8;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Form group styles */
+.form-group {
     margin-bottom: 20px;
 }
 
 label {
-    display: block;
-    margin-bottom: 8px;
     font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
 }
 
+/* Input and select styles */
 input, select {
     width: 100%;
     padding: 12px;
-    margin-bottom: 20px;
+    margin-top: 5px;
     border: none;
     border-radius: 8px;
     background: #2f3543;
     color: white;
+    font-size: 14px;
 }
 
+input::placeholder {
+    color: #a8a8a8;
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%23ffffff' d='M5 6L0 0h10L5 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    cursor: pointer;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border: 2px solid #4b78e1;
+}
+
+/* Button styles */
 button {
     width: 100%;
     padding: 12px;
@@ -57,9 +96,13 @@ button:hover {
     background: #5c8eff;
 }
 
+/* Result styles */
 .result {
     margin-top: 20px;
-    padding: 15px;
+    padding: 20px;
     background: #333844;
     border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 16px;
+    text-align: left;
 }
