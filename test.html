@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Cost Calculator</title>
+    <style>
+        /* General reset and body styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1b1d26;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #252934;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #e0e0e0;
+        }
+
+        .description {
+            font-size: 14px;
+            text-align: center;
+            color: #cfd1d8;
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            font-size: 16px;
+            color: #e0e0e0;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+
+        .dotted-line {
+            flex: 1;
+            border-bottom: 1px dashed #aaa;
+            margin: 0 10px;
+        }
+
+        input, select {
+            font-size: 14px;
+            background-color: #2f3543;
+            color: white;
+            border: 1px solid #3a3f4b;
+            padding: 8px 10px;
+            border-radius: 6px;
+            width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #4b78e1;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #4b78e1;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5c8eff;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #333844;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Cost Calculator</h1>
+        <p class="description">Calculate the total annual cost of a daily task. Enter the details below.</p>
+
+        <div class="form-row">
+            <label for="task">What Task Is It?</label>
+            <div class="dotted-line"></div>
+            <input type="text" id="task" placeholder="E.g., Data entry, report creation">
+        </div>
+
+        <div class="form-row">
+            <label for="taskTime">How Long Does The Task Take</label>
+            <div class="dotted-line"></div>
+            <select id="taskTime">
+                <option value="15">15 minutes</option>
+                <option value="30" selected>30 minutes</option>
+                <option value="60">1 hour</option>
+                <option value="120">2 hours</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="salary">How Much Does Your Employee Get Paid Per Year</label>
+            <div class="dotted-line"></div>
+            <select id="salary">
+                <option value="50000">50,000</option>
+                <option value="60000" selected>60,000</option>
+                <option value="70000">70,000</option>
+                <option value="80000">80,000</option>
+                <option value="100000">100,000</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="benefits">Has Benefits</label>
+            <div class="dotted-line"></div>
+            <select id="benefits">
+                <option value="10">10%</option>
+                <option value="20" selected>20%</option>
+                <option value="25">25%</option>
+                <option value="30">30%</option>
+                <option value="40">40%</option>
+            </select>
+        </div>
+
+        <button onclick="calculateTaskCost()">Calculate Costs</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateTaskCost() {
+            const task = document.getElementById('task').value;
+            const taskTime = parseInt(document.getElementById('taskTime').value);
+            const salary = parseInt(document.getElementById('salary').value);
+            const benefits = parseInt(document.getElementById('benefits').value);
+
+            const benefitsCost = salary * (benefits / 100);
+            const totalCompensation = salary + benefitsCost;
+            const hourlyRate = totalCompensation / (52 * 5 * 8); // Assume 5 workdays/week and 8 hours/day
+            const taskCostPerDay = hourlyRate * (taskTime / 60);
+            const annualCost = taskCostPerDay * (52 * 5); // 5 days/week for 52 weeks
+
+            document.getElementById('result').innerHTML = `
+                <strong>Task Cost Summary:</strong><br>
+                Total Compensation: $${totalCompensation.toFixed(2)}<br>
+                Hourly Rate: $${hourlyRate.toFixed(2)}<br>
+                Daily Cost: $${taskCostPerDay.toFixed(2)}<br>
+                Annual Task Cost: <strong>$${annualCost.toFixed(2)}</strong>
+            `;
+        }
+    </script>
+</body>
+</html>
