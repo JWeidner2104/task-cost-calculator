@@ -49,7 +49,6 @@
         .form-group {
             margin-bottom: 20px;
             text-align: left;
-            position: relative;
         }
 
         label {
@@ -62,7 +61,7 @@
         input, select, textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 5px;
+            margin-top: 5px;
             border-radius: 8px;
             border: none;
             background-color: #3b3f47;
@@ -86,7 +85,6 @@
 
         .custom-input {
             margin-top: 10px;
-            padding: 5px;
         }
 
         button {
@@ -111,8 +109,8 @@
             padding: 20px;
             background-color: #3b3f47;
             border-radius: 8px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
             text-align: center;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
         }
 
         .result p {
@@ -129,7 +127,7 @@
 <body>
     <div class="container">
         <h1>Task Cost Calculator</h1>
-        <p class="description">See how much your recurring tasks cost and learn how we can help you save money.</p>
+        <p class="description">Discover the true cost of daily tasks and find out how we can help save you time and money.</p>
 
         <!-- Task Description -->
         <div class="form-group">
@@ -178,47 +176,66 @@
             <input type="number" id="benefitsOther" class="hidden custom-input" placeholder="Enter custom benefits %">
         </div>
 
-        <!-- Button -->
-        <button onclick="calculateTaskCost()">Generate Results</button>
+        <!-- Vacation Days -->
+        <div class="form-group">
+            <label for="vacationDays">Vacation Days Per Year</label>
+            <select id="vacationDays" onchange="toggleOtherInput(this, 'vacationDaysOther')">
+                <option value="5">5 days</option>
+                <option value="10" selected>10 days</option>
+                <option value="15">15 days</option>
+                <option value="20">20 days</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="number" id="vacationDaysOther" class="hidden custom-input" placeholder="Enter custom vacation days">
+        </div>
 
-        <!-- Results Section -->
+        <!-- Sick Days -->
+        <div class="form-group">
+            <label for="sickDays">Sick Days Per Year</label>
+            <select id="sickDays" onchange="toggleOtherInput(this, 'sickDaysOther')">
+                <option value="0">0 days</option>
+                <option value="5" selected>5 days</option>
+                <option value="10">10 days</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="number" id="sickDaysOther" class="hidden custom-input" placeholder="Enter custom sick days">
+        </div>
+
+        <button onclick="calculateTaskCost()">Generate Results</button>
         <div class="result" id="result"></div>
     </div>
 
     <script>
         function toggleOtherInput(selectElement, otherInputId) {
             const otherInput = document.getElementById(otherInputId);
-            if (selectElement.value === 'other') {
-                otherInput.classList.remove("hidden");
-            } else {
-                otherInput.classList.add("hidden");
-            }
+            otherInput.classList.toggle('hidden', selectElement.value !== 'other');
         }
 
         function getFinalValue(selectId, otherInputId) {
             const select = document.getElementById(selectId);
             const otherInput = document.getElementById(otherInputId);
-            return select.value === 'other' && otherInput.value ? parseFloat(otherInput.value) : parseFloat(select.value);
+            return select.value === 'other' ? parseFloat(otherInput.value) || 0 : parseFloat(select.value);
         }
 
         function calculateTaskCost() {
-            const task = document.getElementById('task').value || 'this task';
+            const task = document.getElementById('task').value || 'This task';
             const taskDuration = getFinalValue('taskDuration', 'taskDurationOther');
             const salary = getFinalValue('salary', 'salaryOther');
             const benefits = getFinalValue('benefits', 'benefitsOther');
+            const vacationDays = getFinalValue('vacationDays', 'vacationDaysOther');
+            const sickDays = getFinalValue('sickDays', 'sickDaysOther');
 
             const totalCompensation = salary + (salary * (benefits / 100));
-            const hourlyRate = totalCompensation / (52 * 5 * 8);
-            const dailyCost = hourlyRate * (taskDuration / 60);
-            const annualCost = dailyCost * (52 * 5);
+            const totalWorkingDays = (52 * 5) - (vacationDays + sickDays);
+            const dailyCost = (totalCompensation / (totalWorkingDays * 8)) * (taskDuration / 60);
+            const annualCost = dailyCost * totalWorkingDays;
 
-            document.getElementById("result").innerHTML = `
+            document.getElementById('result').innerHTML = `
                 <p><strong>${task.toUpperCase()}</strong></p>
-                <p>Steals <strong>${taskDuration} minutes</strong> of your day, every day.</p>
+                <p>Steals <strong>${taskDuration} minutes</strong> of your day.</p>
                 <p>It's costing you <strong>$${dailyCost.toFixed(2)} per day</strong>.</p>
-                <p>That's a staggering <strong>$${annualCost.toFixed(2)} per year!</strong></p>
-                <p>Imagine what you could achieve by automating this task.<br>
-                Let our agency handle it – <strong>so you can focus on what matters.</strong></p>
+                <p>That's a total of <strong>$${annualCost.toFixed(2)} per year!</strong></p>
+                <p>Let us handle this for you and put your time where it really matters.</p>
             `;
         }
     </script>
