@@ -66,7 +66,7 @@
             margin: 0 10px;
         }
 
-        input, select {
+        textarea, input, select {
             font-size: 14px;
             background-color: #2f3543;
             color: white;
@@ -77,9 +77,18 @@
             transition: all 0.3s ease;
         }
 
-        input:focus, select:focus {
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
             border-color: #4b78e1;
             outline: none;
+        }
+
+        .hidden {
+            display: none;
         }
 
         button {
@@ -128,63 +137,48 @@
         <div class="form-row">
             <label for="task">What Task Is It?</label>
             <div class="dotted-line"></div>
-            <input type="text" id="task" placeholder="E.g., Data entry, report creation">
+            <textarea id="task" placeholder="Describe the task in detail..."></textarea>
         </div>
 
         <div class="form-row">
             <label for="taskTime">How Long Does The Task Take</label>
             <div class="dotted-line"></div>
-            <select id="taskTime">
+            <select id="taskTime" onchange="toggleOtherField(this, 'taskTimeOther')">
                 <option value="15">15 minutes</option>
                 <option value="30" selected>30 minutes</option>
                 <option value="60">1 hour</option>
                 <option value="120">2 hours</option>
+                <option value="other">Other</option>
             </select>
+            <input type="number" id="taskTimeOther" class="hidden" placeholder="Enter minutes">
         </div>
 
         <div class="form-row">
-            <label for="salary">How Much Does Your Employee Get Paid Per Year</label>
+            <label for="salary">Annual Employee Salary</label>
             <div class="dotted-line"></div>
-            <select id="salary">
+            <select id="salary" onchange="toggleOtherField(this, 'salaryOther')">
                 <option value="50000">50,000</option>
                 <option value="60000" selected>60,000</option>
                 <option value="70000">70,000</option>
                 <option value="80000">80,000</option>
                 <option value="100000">100,000</option>
+                <option value="other">Other</option>
             </select>
+            <input type="number" id="salaryOther" class="hidden" placeholder="Enter salary">
         </div>
 
         <div class="form-row">
             <label for="benefits">Benefits Percentage</label>
             <div class="dotted-line"></div>
-            <select id="benefits">
+            <select id="benefits" onchange="toggleOtherField(this, 'benefitsOther')">
                 <option value="10">10%</option>
-                <option value="20">20%</option>
-                <option value="25" selected>25%</option>
+                <option value="20" selected>20%</option>
+                <option value="25">25%</option>
                 <option value="30">30%</option>
                 <option value="40">40%</option>
+                <option value="other">Other</option>
             </select>
-        </div>
-
-        <div class="form-row">
-            <label for="vacationDays">Vacation Days Per Year</label>
-            <div class="dotted-line"></div>
-            <select id="vacationDays">
-                <option value="5">5 days</option>
-                <option value="10" selected>10 days</option>
-                <option value="15">15 days</option>
-                <option value="20">20 days</option>
-            </select>
-        </div>
-
-        <div class="form-row">
-            <label for="sickDays">Sick Days Per Year</label>
-            <div class="dotted-line"></div>
-            <select id="sickDays">
-                <option value="0">0 days</option>
-                <option value="5" selected>5 days</option>
-                <option value="10">10 days</option>
-            </select>
+            <input type="number" id="benefitsOther" class="hidden" placeholder="Enter percentage">
         </div>
 
         <button onclick="calculateTaskCost()">Calculate Costs</button>
@@ -192,26 +186,37 @@
     </div>
 
     <script>
+        function toggleOtherField(selectElement, otherInputId) {
+            const otherInput = document.getElementById(otherInputId);
+            if (selectElement.value === "other") {
+                otherInput.classList.remove("hidden");
+            } else {
+                otherInput.classList.add("hidden");
+            }
+        }
+
+        function getFinalValue(selectId, otherInputId) {
+            const selectValue = document.getElementById(selectId).value;
+            const otherInput = document.getElementById(otherInputId);
+            return selectValue === "other" && otherInput.value ? parseFloat(otherInput.value) : parseFloat(selectValue);
+        }
+
         function calculateTaskCost() {
-            const task = document.getElementById('task').value || "the task";
-            const taskTime = parseInt(document.getElementById('taskTime').value);
-            const salary = parseInt(document.getElementById('salary').value);
-            const benefits = parseInt(document.getElementById('benefits').value);
-            const vacationDays = parseInt(document.getElementById('vacationDays').value);
-            const sickDays = parseInt(document.getElementById('sickDays').value);
+            const task = document.getElementById("task").value || "the task";
+            const taskTime = getFinalValue("taskTime", "taskTimeOther");
+            const salary = getFinalValue("salary", "salaryOther");
+            const benefits = getFinalValue("benefits", "benefitsOther");
 
-            const benefitsCost = salary * (benefits / 100);
-            const totalCompensation = salary + benefitsCost;
-            const totalWorkingDays = (52 * 5) - (vacationDays + sickDays);
-            const hourlyRate = totalCompensation / (totalWorkingDays * 8); 
+            const totalCompensation = salary + (salary * (benefits / 100));
+            const hourlyRate = totalCompensation / (52 * 5 * 8); 
             const dailyTaskCost = hourlyRate * (taskTime / 60);
-            const totalCostPerYear = dailyTaskCost * totalWorkingDays;
+            const totalCostPerYear = dailyTaskCost * (52 * 5);
 
-            document.getElementById('result').innerHTML = `
+            document.getElementById("result").innerHTML = `
                 <p><strong>${task.toUpperCase()}</strong></p>
-                <p>which takes <strong>${taskTime} MINUTES</strong></p>
-                <p>costs you <strong>$${dailyTaskCost.toFixed(2)} PER DAY</strong>.</p>
-                <p>This results in a yearly cost of <strong>$${totalCostPerYear.toFixed(2)}</strong>.</p>
+                <p>WHICH TAKES <strong>${taskTime} MINUTES</strong></p>
+                <p>COSTS YOU <strong>$${dailyTaskCost.toFixed(2)} PER DAY</strong>.</p>
+                <p>THIS RESULTS IN A YEARLY COST OF <strong>$${totalCostPerYear.toFixed(2)}</strong>.</p>
             `;
         }
     </script>
