@@ -21,6 +21,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
         .container {
@@ -50,7 +51,6 @@
             display: flex;
             align-items: center;
             margin-bottom: 25px;
-            position: relative;
         }
 
         label {
@@ -101,13 +101,22 @@
         }
 
         .result {
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 15px;
             background: #333844;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             color: #e0e0e0;
-            line-height: 1.5;
+            text-align: center;
+        }
+
+        .result strong {
+            font-size: 20px;
+            color: #ffd700; /* Make totals stand out */
+        }
+
+        .result p {
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -146,14 +155,35 @@
         </div>
 
         <div class="form-row">
-            <label for="benefits">Has Benefits</label>
+            <label for="benefits">Benefits Percentage</label>
             <div class="dotted-line"></div>
             <select id="benefits">
                 <option value="10">10%</option>
-                <option value="20" selected>20%</option>
-                <option value="25">25%</option>
+                <option value="20">20%</option>
+                <option value="25" selected>25%</option>
                 <option value="30">30%</option>
                 <option value="40">40%</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="vacationDays">Vacation Days Per Year</label>
+            <div class="dotted-line"></div>
+            <select id="vacationDays">
+                <option value="5">5 days</option>
+                <option value="10" selected>10 days</option>
+                <option value="15">15 days</option>
+                <option value="20">20 days</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="sickDays">Sick Days Per Year</label>
+            <div class="dotted-line"></div>
+            <select id="sickDays">
+                <option value="0">0 days</option>
+                <option value="5" selected>5 days</option>
+                <option value="10">10 days</option>
             </select>
         </div>
 
@@ -163,23 +193,25 @@
 
     <script>
         function calculateTaskCost() {
-            const task = document.getElementById('task').value;
+            const task = document.getElementById('task').value || "the task";
             const taskTime = parseInt(document.getElementById('taskTime').value);
             const salary = parseInt(document.getElementById('salary').value);
             const benefits = parseInt(document.getElementById('benefits').value);
+            const vacationDays = parseInt(document.getElementById('vacationDays').value);
+            const sickDays = parseInt(document.getElementById('sickDays').value);
 
             const benefitsCost = salary * (benefits / 100);
             const totalCompensation = salary + benefitsCost;
-            const hourlyRate = totalCompensation / (52 * 5 * 8); // Assume 5 workdays/week and 8 hours/day
-            const taskCostPerDay = hourlyRate * (taskTime / 60);
-            const annualCost = taskCostPerDay * (52 * 5); // 5 days/week for 52 weeks
+            const totalWorkingDays = (52 * 5) - (vacationDays + sickDays);
+            const hourlyRate = totalCompensation / (totalWorkingDays * 8); 
+            const dailyTaskCost = hourlyRate * (taskTime / 60);
+            const totalCostPerYear = dailyTaskCost * totalWorkingDays;
 
             document.getElementById('result').innerHTML = `
-                <strong>Task Cost Summary:</strong><br>
-                Total Compensation: $${totalCompensation.toFixed(2)}<br>
-                Hourly Rate: $${hourlyRate.toFixed(2)}<br>
-                Daily Cost: $${taskCostPerDay.toFixed(2)}<br>
-                Annual Task Cost: <strong>$${annualCost.toFixed(2)}</strong>
+                <p><strong>${task.toUpperCase()}</strong></p>
+                <p>which takes <strong>${taskTime} MINUTES</strong></p>
+                <p>costs you <strong>$${dailyTaskCost.toFixed(2)} PER DAY</strong>.</p>
+                <p>This results in a yearly cost of <strong>$${totalCostPerYear.toFixed(2)}</strong>.</p>
             `;
         }
     </script>
