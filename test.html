@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Cost Calculator</title>
     <style>
-        /* General reset and body styles */
+        /* Reset and body styles */
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #1b1d26;
+            background-color: #1c1e22;
             color: white;
             display: flex;
             justify-content: center;
@@ -25,66 +25,57 @@
         }
 
         .container {
-            background: #252934;
-            padding: 40px;
+            background-color: #2b2f36;
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 700px;
+            max-width: 600px;
+            text-align: center;
         }
 
         h1 {
+            color: #69b0ab;
             font-size: 28px;
-            text-align: center;
-            margin-bottom: 15px;
-            color: #e0e0e0;
+            margin-bottom: 20px;
         }
 
         .description {
             font-size: 14px;
-            text-align: center;
-            color: #cfd1d8;
-            margin-bottom: 30px;
+            color: #b0b8c4;
+            margin-bottom: 20px;
         }
 
-        .form-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         label {
-            font-size: 16px;
-            color: #e0e0e0;
-            white-space: nowrap;
-            margin-right: 10px;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e2e4e6;
         }
 
-        .dotted-line {
-            flex: 1;
-            border-bottom: 1px dashed #aaa;
-            margin: 0 10px;
-        }
-
-        textarea, input, select {
-            font-size: 14px;
-            background-color: #2f3543;
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background-color: #3b3f47;
             color: white;
-            border: 1px solid #3a3f4b;
-            padding: 8px 10px;
-            border-radius: 6px;
-            width: 180px;
-            transition: all 0.3s ease;
+            font-size: 14px;
         }
 
         textarea {
-            height: 80px;
             resize: none;
+            height: 80px;
         }
 
         input:focus, select:focus, textarea:focus {
-            border-color: #4b78e1;
-            outline: none;
+            outline: 2px solid #69b0ab;
+            box-shadow: 0px 0px 10px rgba(105, 176, 171, 0.5);
         }
 
         .hidden {
@@ -94,69 +85,68 @@
         button {
             width: 100%;
             padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            background-color: #4b78e1;
             border: none;
             border-radius: 8px;
+            background-color: #69b0ab;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
-            margin-top: 20px;
             transition: background 0.3s ease;
         }
 
         button:hover {
-            background-color: #5c8eff;
+            background-color: #81c7bf;
         }
 
         .result {
             margin-top: 30px;
-            padding: 15px;
-            background: #333844;
+            padding: 20px;
+            background-color: #3b3f47;
             border-radius: 8px;
-            font-size: 16px;
-            color: #e0e0e0;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
             text-align: center;
-        }
-
-        .result strong {
-            font-size: 20px;
-            color: #ffd700; /* Make totals stand out */
         }
 
         .result p {
             margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .result strong {
+            color: #ffd700;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Task Cost Calculator</h1>
-        <p class="description">Calculate the total annual cost of a daily task. Enter the details below.</p>
+        <p class="description">See how much your recurring tasks cost and learn how we can help you save money.</p>
 
-        <div class="form-row">
-            <label for="task">What Task Is It?</label>
-            <div class="dotted-line"></div>
-            <textarea id="task" placeholder="Describe the task in detail..."></textarea>
+        <!-- Task Description -->
+        <div class="form-group">
+            <label for="task">Task Description</label>
+            <textarea id="task" placeholder="Describe the task..."></textarea>
         </div>
 
-        <div class="form-row">
-            <label for="taskTime">How Long Does The Task Take</label>
-            <div class="dotted-line"></div>
-            <select id="taskTime" onchange="toggleOtherField(this, 'taskTimeOther')">
+        <!-- Task Duration -->
+        <div class="form-group">
+            <label for="taskDuration">Task Duration (Minutes Per Day)</label>
+            <select id="taskDuration" onchange="toggleOtherInput(this, 'taskDurationOther')">
                 <option value="15">15 minutes</option>
                 <option value="30" selected>30 minutes</option>
                 <option value="60">1 hour</option>
                 <option value="120">2 hours</option>
                 <option value="other">Other</option>
             </select>
-            <input type="number" id="taskTimeOther" class="hidden" placeholder="Enter minutes">
+            <input type="number" id="taskDurationOther" class="hidden" placeholder="Enter custom duration">
         </div>
 
-        <div class="form-row">
+        <!-- Annual Salary -->
+        <div class="form-group">
             <label for="salary">Annual Employee Salary</label>
-            <div class="dotted-line"></div>
-            <select id="salary" onchange="toggleOtherField(this, 'salaryOther')">
+            <select id="salary" onchange="toggleOtherInput(this, 'salaryOther')">
                 <option value="50000">50,000</option>
                 <option value="60000" selected>60,000</option>
                 <option value="70000">70,000</option>
@@ -164,59 +154,48 @@
                 <option value="100000">100,000</option>
                 <option value="other">Other</option>
             </select>
-            <input type="number" id="salaryOther" class="hidden" placeholder="Enter salary">
+            <input type="number" id="salaryOther" class="hidden" placeholder="Enter custom salary">
         </div>
 
-        <div class="form-row">
-            <label for="benefits">Benefits Percentage</label>
-            <div class="dotted-line"></div>
-            <select id="benefits" onchange="toggleOtherField(this, 'benefitsOther')">
-                <option value="10">10%</option>
-                <option value="20" selected>20%</option>
-                <option value="25">25%</option>
-                <option value="30">30%</option>
-                <option value="40">40%</option>
-                <option value="other">Other</option>
-            </select>
-            <input type="number" id="benefitsOther" class="hidden" placeholder="Enter percentage">
-        </div>
+        <!-- Calculate Button -->
+        <button onclick="calculateTaskCost()">Generate Results</button>
 
-        <button onclick="calculateTaskCost()">Calculate Costs</button>
+        <!-- Results Section -->
         <div class="result" id="result"></div>
     </div>
 
     <script>
-        function toggleOtherField(selectElement, otherInputId) {
+        function toggleOtherInput(selectElement, otherInputId) {
             const otherInput = document.getElementById(otherInputId);
-            if (selectElement.value === "other") {
-                otherInput.classList.remove("hidden");
+            if (selectElement.value === 'other') {
+                otherInput.classList.remove('hidden');
             } else {
-                otherInput.classList.add("hidden");
+                otherInput.classList.add('hidden');
             }
         }
 
         function getFinalValue(selectId, otherInputId) {
-            const selectValue = document.getElementById(selectId).value;
+            const select = document.getElementById(selectId);
             const otherInput = document.getElementById(otherInputId);
-            return selectValue === "other" && otherInput.value ? parseFloat(otherInput.value) : parseFloat(selectValue);
+            return select.value === 'other' && otherInput.value ? parseFloat(otherInput.value) : parseFloat(select.value);
         }
 
         function calculateTaskCost() {
-            const task = document.getElementById("task").value || "the task";
-            const taskTime = getFinalValue("taskTime", "taskTimeOther");
-            const salary = getFinalValue("salary", "salaryOther");
-            const benefits = getFinalValue("benefits", "benefitsOther");
+            const task = document.getElementById('task').value || 'this task';
+            const taskDuration = getFinalValue('taskDuration', 'taskDurationOther');
+            const salary = getFinalValue('salary', 'salaryOther');
 
-            const totalCompensation = salary + (salary * (benefits / 100));
-            const hourlyRate = totalCompensation / (52 * 5 * 8); 
-            const dailyTaskCost = hourlyRate * (taskTime / 60);
-            const totalCostPerYear = dailyTaskCost * (52 * 5);
+            const hourlyRate = salary / (52 * 5 * 8);
+            const dailyCost = hourlyRate * (taskDuration / 60);
+            const annualCost = dailyCost * (52 * 5);
 
-            document.getElementById("result").innerHTML = `
+            document.getElementById('result').innerHTML = `
                 <p><strong>${task.toUpperCase()}</strong></p>
-                <p>WHICH TAKES <strong>${taskTime} MINUTES</strong></p>
-                <p>COSTS YOU <strong>$${dailyTaskCost.toFixed(2)} PER DAY</strong>.</p>
-                <p>THIS RESULTS IN A YEARLY COST OF <strong>$${totalCostPerYear.toFixed(2)}</strong>.</p>
+                <p>Steals <strong>${taskDuration} minutes</strong> of your day, every day.</p>
+                <p>It's costing you <strong>$${dailyCost.toFixed(2)} per day</strong>.</p>
+                <p>That's a staggering <strong>$${annualCost.toFixed(2)} per year!</strong></p>
+                <p>Imagine what you could achieve by automating this task.<br>
+                Let our agency handle it – <strong>so you can focus on what matters.</strong></p>
             `;
         }
     </script>
